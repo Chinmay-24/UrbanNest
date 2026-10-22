@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Edit visitor · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit visitor log</h1>
+  <div class="panel p-4" style="max-width:36rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Host resident</label>
+        <select class="form-select" name="host_resident_id">
+          {% for r in residents %}<option value="{{ r.resident_id }}" {% if r.resident_id == row.host_resident_id %}selected{% endif %}>{{ r.full_name }} ({{ r.flat_number }})</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-12"><label class="form-label">Visitor name</label><input class="form-control" name="visitor_name" value="{{ row.visitor_name }}" required></div>
+      <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="visitor_phone" value="{{ row.visitor_phone }}" required></div>
+      <div class="col-6"><label class="form-label">Vehicle</label><input class="form-control" name="vehicle_number" value="{{ row.vehicle_number or '' }}"></div>
+      <div class="col-12"><label class="form-label">Purpose</label><input class="form-control" name="purpose" value="{{ row.purpose }}" required></div>
+      <div class="col-12"><label class="form-label">Entry</label><input class="form-control" type="datetime-local" name="entry_time" value="{{ row.entry_time|input_dt }}" required></div>
+      <div class="col-12"><label class="form-label">Exit</label><input class="form-control" type="datetime-local" name="exit_time" value="{{ row.exit_time|input_dt }}"></div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('visitors') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

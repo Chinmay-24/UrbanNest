@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Edit staff · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit staff</h1>
+  <div class="panel p-4" style="max-width:36rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12"><label class="form-label">Name</label><input class="form-control" name="full_name" value="{{ row.full_name }}" required></div>
+      <div class="col-12">
+        <label class="form-label">Role</label>
+        <select class="form-select" name="role">{% for t in roles %}<option {% if t == row.role %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="phone" value="{{ row.phone }}" required></div>
+      <div class="col-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" value="{{ row.email }}" required></div>
+      <div class="col-6"><label class="form-label">Salary</label><input class="form-control" type="number" step="0.01" name="salary" value="{{ row.salary }}" required></div>
+      <div class="col-6"><label class="form-label">Join date</label><input class="form-control" type="date" name="join_date" value="{{ row.join_date|input_date }}" required></div>
+      <div class="col-12">
+        <label class="form-label">Status</label>
+        <select class="form-select" name="employment_status">{% for t in employment %}<option {% if t == row.employment_status %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('staff') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

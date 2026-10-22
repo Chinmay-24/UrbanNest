@@ -1,0 +1,97 @@
+:root {
+  --ink: #1c2740;
+  --muted: #5d6b82;
+  --paper: #f4f1ea;
+  --card: #fffcf7;
+  --line: #e2d9cc;
+  --accent: #b4532a;
+  --accent-dark: #8d3d1e;
+  --navy: #243656;
+}
+
+body {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.navbar-brand {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.navbar.navbar-dark {
+  background: var(--navy);
+}
+
+.navbar .nav-link.active {
+  color: #f3d3b3 !important;
+}
+
+.page-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem;
+}
+
+.stat-card .label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-card .value {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.7rem;
+  color: var(--navy);
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+}
+
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-accent:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+
+.table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: #f7f1e8;
+}
+
+.badge-soft {
+  background: #efe3d4;
+  color: var(--navy);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #c9a27a;
+  box-shadow: 0 0 0 0.2rem rgba(180, 83, 42, 0.12);
+}
+
+footer {
+  color: var(--muted);
+}

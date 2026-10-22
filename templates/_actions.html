@@ -1,0 +1,8 @@
+{% macro row_actions(edit_url, delete_url, label) %}
+  <div class="d-flex gap-2">
+    <a class="btn btn-sm btn-outline-secondary" href="{{ edit_url }}">Edit</a>
+    <form method="post" action="{{ delete_url }}" data-confirm="Delete this {{ label }}?">
+      <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+    </form>
+  </div>
+{% endmacro %}

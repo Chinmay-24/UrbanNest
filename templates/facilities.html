@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Facilities · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Common facilities</h1>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Add facility</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12"><label class="form-label">Name</label><input class="form-control" name="facility_name" required></div>
+          <div class="col-12"><label class="form-label">Location</label><input class="form-control" name="location" required></div>
+          <div class="col-6"><label class="form-label">Capacity</label><input class="form-control" type="number" min="1" name="capacity" required></div>
+          <div class="col-6"><label class="form-label">Hourly rate</label><input class="form-control" type="number" step="0.01" min="0" name="hourly_rate" required></div>
+          <div class="col-12 form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="is_active" id="active" checked>
+            <label class="form-check-label" for="active">Active</label>
+          </div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Facility</th><th>Capacity</th><th>Rate</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.facility_name }}<div class="small text-secondary">{{ row.location }}</div></td>
+                  <td>{{ row.capacity }}</td>
+                  <td>{{ row.hourly_rate|money }}</td>
+                  <td>{% if row.is_active %}Active{% else %}Inactive{% endif %}</td>
+                  <td>{{ row_actions(url_for('edit_facility', facility_id=row.facility_id), url_for('delete_facility', facility_id=row.facility_id), 'facility') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

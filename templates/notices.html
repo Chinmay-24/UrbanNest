@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Notices · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Apartment notices</h1>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Publish notice</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Publisher</label>
+            <select class="form-select" name="published_by_staff_id">
+              {% for s in staff %}<option value="{{ s.staff_id }}">{{ s.full_name }} · {{ s.role }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-12"><label class="form-label">Title</label><input class="form-control" name="title" required></div>
+          <div class="col-12"><label class="form-label">Content</label><textarea class="form-control" name="content" rows="3" required></textarea></div>
+          <div class="col-12">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category">{% for t in categories %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-6"><label class="form-label">Publish</label><input class="form-control" type="date" name="publish_date" value="{{ today }}" required></div>
+          <div class="col-6"><label class="form-label">Expiry</label><input class="form-control" type="date" name="expiry_date"></div>
+          <div class="col-12 form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="is_active" id="active" checked>
+            <label class="form-check-label" for="active">Active</label>
+          </div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Notice</th><th>Publisher</th><th>Dates</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.title }}<div class="small text-secondary">{{ row.category }} · {% if row.is_active %}Active{% else %}Inactive{% endif %}</div></td>
+                  <td>{{ row.publisher }}</td>
+                  <td>{{ row.publish_date|when }}{% if row.expiry_date %}<div class="small text-secondary">until {{ row.expiry_date|when }}</div>{% endif %}</td>
+                  <td>{{ row_actions(url_for('edit_notice', notice_id=row.notice_id), url_for('delete_notice', notice_id=row.notice_id), 'notice') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

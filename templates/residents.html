@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Residents · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Residents</h1>
+  <div class="row g-4">
+    <div class="col-xl-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Add resident</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Flat</label>
+            <select class="form-select" name="flat_id" required>
+              {% for f in flats %}<option value="{{ f.flat_id }}">{{ f.block_name }} / {{ f.flat_number }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-12"><label class="form-label">Full name</label><input class="form-control" name="full_name" required></div>
+          <div class="col-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" required></div>
+          <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="phone" required></div>
+          <div class="col-6">
+            <label class="form-label">ID proof</label>
+            <select class="form-select" name="id_proof_type">{% for t in id_proofs %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-6"><label class="form-label">ID number</label><input class="form-control" name="id_proof_number" required></div>
+          <div class="col-6">
+            <label class="form-label">Type</label>
+            <select class="form-select" name="resident_type">{% for t in resident_types %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-6"><label class="form-label">Move-in</label><input class="form-control" type="date" name="move_in_date" required></div>
+          <div class="col-6"><label class="form-label">Move-out</label><input class="form-control" type="date" name="move_out_date"></div>
+          <div class="col-12 form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="is_primary_contact" id="primary">
+            <label class="form-check-label" for="primary">Primary contact</label>
+          </div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-xl-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Name</th><th>Flat</th><th>Contact</th><th>Type</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.full_name }}{% if row.is_primary_contact %} <span class="badge badge-soft">Primary</span>{% endif %}</td>
+                  <td>{{ row.block_name }} / {{ row.flat_number }}</td>
+                  <td>{{ row.phone }}<div class="small text-secondary">{{ row.email }}</div></td>
+                  <td>{{ row.resident_type }}</td>
+                  <td>{{ row_actions(url_for('edit_resident', resident_id=row.resident_id), url_for('delete_resident', resident_id=row.resident_id), 'resident') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

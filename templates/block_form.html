@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Edit block · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit block</h1>
+  <div class="panel p-4" style="max-width:36rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12"><label class="form-label">Name</label><input class="form-control" name="block_name" value="{{ row.block_name }}" required></div>
+      <div class="col-6"><label class="form-label">Floors</label><input class="form-control" type="number" min="1" name="total_floors" value="{{ row.total_floors }}" required></div>
+      <div class="col-6"><label class="form-label">Total flats</label><input class="form-control" type="number" min="1" name="total_flats" value="{{ row.total_flats }}" required></div>
+      <div class="col-12"><label class="form-label">Year</label><input class="form-control" type="number" name="constructed_year" value="{{ row.constructed_year }}" required></div>
+      <div class="col-12"><label class="form-label">Description</label><input class="form-control" name="description" value="{{ row.description or '' }}"></div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('blocks') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

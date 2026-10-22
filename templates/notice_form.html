@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Edit notice · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit notice</h1>
+  <div class="panel p-4" style="max-width:40rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Publisher</label>
+        <select class="form-select" name="published_by_staff_id">
+          {% for s in staff %}<option value="{{ s.staff_id }}" {% if s.staff_id == row.published_by_staff_id %}selected{% endif %}>{{ s.full_name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-12"><label class="form-label">Title</label><input class="form-control" name="title" value="{{ row.title }}" required></div>
+      <div class="col-12"><label class="form-label">Content</label><textarea class="form-control" name="content" rows="4" required>{{ row.content }}</textarea></div>
+      <div class="col-12">
+        <label class="form-label">Category</label>
+        <select class="form-select" name="category">{% for t in categories %}<option {% if t == row.category %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6"><label class="form-label">Publish</label><input class="form-control" type="date" name="publish_date" value="{{ row.publish_date|input_date }}" required></div>
+      <div class="col-6"><label class="form-label">Expiry</label><input class="form-control" type="date" name="expiry_date" value="{{ row.expiry_date|input_date }}"></div>
+      <div class="col-12 form-check">
+        <input class="form-check-input" type="checkbox" name="is_active" id="active" {% if row.is_active %}checked{% endif %}>
+        <label class="form-check-label" for="active">Active</label>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('notices') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

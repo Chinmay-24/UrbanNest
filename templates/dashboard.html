@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · UrbanNest{% endblock %}
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+    <div>
+      <p class="text-uppercase small mb-1" style="letter-spacing:.08em;color:#5d6b82;">Society overview</p>
+      <h1 class="page-title h2 mb-0">Apartment dashboard</h1>
+    </div>
+    <p class="mb-0 text-secondary">Figures use JOIN queries and MySQL views.</p>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Blocks</div><div class="value">{{ stats.blocks }}</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Flats</div><div class="value">{{ stats.flats }}</div><div class="small text-secondary">{{ stats.occupied }} occupied</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Residents</div><div class="value">{{ stats.residents }}</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Outstanding</div><div class="value">₹{{ stats.outstanding|money }}</div><div class="small text-secondary">Avg bill ₹{{ stats.avg_bill|money }}</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Open complaints</div><div class="value">{{ stats.open_complaints }}</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Visitors inside</div><div class="value">{{ stats.inside_visitors }}</div></div></div>
+    <div class="col-6 col-lg-3"><div class="stat-card"><div class="label">Upcoming bookings</div><div class="value">{{ stats.bookings }}</div></div></div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="label">Occupancy mix</div>
+        {% for row in occupancy %}
+          <div class="d-flex justify-content-between small"><span>{{ row.occupancy_status }}</span><strong>{{ row.n }}</strong></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="panel p-3 p-md-4 h-100">
+        <h2 class="h5 page-title">Resident dues · vw_resident_dues</h2>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead><tr><th>Resident</th><th>Flat</th><th class="text-end">Billed</th><th class="text-end">Paid</th><th class="text-end">Due</th></tr></thead>
+            <tbody>
+              {% for row in dues %}
+                <tr>
+                  <td>{{ row.full_name }}</td>
+                  <td>{{ row.block_name }} / {{ row.flat_number }}</td>
+                  <td class="text-end">{{ row.total_billed|money }}</td>
+                  <td class="text-end">{{ row.total_paid|money }}</td>
+                  <td class="text-end fw-semibold">{{ row.outstanding|money }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="5" class="text-secondary">No outstanding dues.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="panel p-3 p-md-4 h-100">
+        <h2 class="h5 page-title">Complaints · vw_complaint_workload</h2>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead><tr><th>Category</th><th>Status</th><th>Count</th><th>Avg hrs</th></tr></thead>
+            <tbody>
+              {% for row in workload %}
+                <tr>
+                  <td>{{ row.category }}</td>
+                  <td>{{ row.status }}</td>
+                  <td>{{ row.complaint_count }}</td>
+                  <td>{{ row.avg_hours_open }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="4" class="text-secondary">No complaints yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel p-3 p-md-4 h-100">
+        <h2 class="h5 page-title">Active notices</h2>
+        {% for row in notices %}
+          <div class="border-bottom py-2">
+            <div class="fw-semibold">{{ row.title }}</div>
+            <div class="small text-secondary">{{ row.category }} · {{ row.publish_date|when }} · {{ row.publisher }}</div>
+          </div>
+        {% else %}
+          <p class="text-secondary mb-0">No active notices.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel p-3 p-md-4 h-100">
+        <h2 class="h5 page-title">Recent visitors</h2>
+        {% for row in recent_visitors %}
+          <div class="border-bottom py-2">
+            <div class="fw-semibold">{{ row.visitor_name }} → {{ row.host_name }} ({{ row.flat_number }})</div>
+            <div class="small text-secondary">{{ row.purpose }} · in {{ row.entry_time|when }}{% if row.exit_time %} · out {{ row.exit_time|when }}{% endif %}</div>
+          </div>
+        {% else %}
+          <p class="text-secondary mb-0">No visitor logs.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

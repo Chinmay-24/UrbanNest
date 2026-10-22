@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Edit complaint · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit complaint</h1>
+  <div class="panel p-4" style="max-width:40rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Resident</label>
+        <select class="form-select" name="resident_id">
+          {% for r in residents %}<option value="{{ r.resident_id }}" {% if r.resident_id == row.resident_id %}selected{% endif %}>{{ r.full_name }} ({{ r.flat_number }})</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Assign staff</label>
+        <select class="form-select" name="assigned_staff_id">
+          <option value="">Unassigned</option>
+          {% for s in staff %}<option value="{{ s.staff_id }}" {% if s.staff_id == row.assigned_staff_id %}selected{% endif %}>{{ s.full_name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label">Category</label>
+        <select class="form-select" name="category">{% for t in categories %}<option {% if t == row.category %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6">
+        <label class="form-label">Status</label>
+        <select class="form-select" name="status">{% for t in statuses %}<option {% if t == row.status %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-12"><label class="form-label">Title</label><input class="form-control" name="title" value="{{ row.title }}" required></div>
+      <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" name="description" rows="3" required>{{ row.description }}</textarea></div>
+      <div class="col-12"><label class="form-label">Raised on</label><input class="form-control" type="datetime-local" name="raised_on" value="{{ row.raised_on|input_dt }}" required></div>
+      <div class="col-12"><label class="form-label">Resolved on</label><input class="form-control" type="datetime-local" name="resolved_on" value="{{ row.resolved_on|input_dt }}"></div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('complaints') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

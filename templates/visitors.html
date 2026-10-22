@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Visitors · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Visitor logs</h1>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Log visitor</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Host resident</label>
+            <select class="form-select" name="host_resident_id">
+              {% for r in residents %}<option value="{{ r.resident_id }}">{{ r.full_name }} ({{ r.flat_number }})</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-12"><label class="form-label">Visitor name</label><input class="form-control" name="visitor_name" required></div>
+          <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="visitor_phone" required></div>
+          <div class="col-6"><label class="form-label">Vehicle</label><input class="form-control" name="vehicle_number"></div>
+          <div class="col-12"><label class="form-label">Purpose</label><input class="form-control" name="purpose" required></div>
+          <div class="col-12"><label class="form-label">Entry</label><input class="form-control" type="datetime-local" name="entry_time" required></div>
+          <div class="col-12"><label class="form-label">Exit</label><input class="form-control" type="datetime-local" name="exit_time"></div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Visitor</th><th>Host</th><th>Entry / exit</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.visitor_name }}<div class="small text-secondary">{{ row.purpose }}</div></td>
+                  <td>{{ row.host_name }}<div class="small text-secondary">{{ row.block_name }} / {{ row.flat_number }}</div></td>
+                  <td>{{ row.entry_time|when }}<div class="small text-secondary">{% if row.exit_time %}{{ row.exit_time|when }}{% else %}Still inside{% endif %}</div></td>
+                  <td>{{ row_actions(url_for('edit_visitor', visitor_log_id=row.visitor_log_id), url_for('delete_visitor', visitor_log_id=row.visitor_log_id), 'visitor log') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

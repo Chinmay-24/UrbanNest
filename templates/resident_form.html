@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Edit resident · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit resident</h1>
+  <div class="panel p-4" style="max-width:40rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Flat</label>
+        <select class="form-select" name="flat_id">
+          {% for f in flats %}<option value="{{ f.flat_id }}" {% if f.flat_id == row.flat_id %}selected{% endif %}>{{ f.block_name }} / {{ f.flat_number }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-12"><label class="form-label">Full name</label><input class="form-control" name="full_name" value="{{ row.full_name }}" required></div>
+      <div class="col-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" value="{{ row.email }}" required></div>
+      <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="phone" value="{{ row.phone }}" required></div>
+      <div class="col-6">
+        <label class="form-label">ID proof</label>
+        <select class="form-select" name="id_proof_type">{% for t in id_proofs %}<option {% if t == row.id_proof_type %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6"><label class="form-label">ID number</label><input class="form-control" name="id_proof_number" value="{{ row.id_proof_number }}" required></div>
+      <div class="col-6">
+        <label class="form-label">Type</label>
+        <select class="form-select" name="resident_type">{% for t in resident_types %}<option {% if t == row.resident_type %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6"><label class="form-label">Move-in</label><input class="form-control" type="date" name="move_in_date" value="{{ row.move_in_date|input_date }}" required></div>
+      <div class="col-6"><label class="form-label">Move-out</label><input class="form-control" type="date" name="move_out_date" value="{{ row.move_out_date|input_date }}"></div>
+      <div class="col-12 form-check">
+        <input class="form-check-input" type="checkbox" name="is_primary_contact" id="primary" {% if row.is_primary_contact %}checked{% endif %}>
+        <label class="form-check-label" for="primary">Primary contact</label>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('residents') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

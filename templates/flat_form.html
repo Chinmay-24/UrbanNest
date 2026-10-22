@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Edit flat · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Edit flat</h1>
+  <div class="panel p-4" style="max-width:36rem;">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Block</label>
+        <select class="form-select" name="block_id">
+          {% for b in blocks %}<option value="{{ b.block_id }}" {% if b.block_id == row.block_id %}selected{% endif %}>{{ b.block_name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-6"><label class="form-label">Number</label><input class="form-control" name="flat_number" value="{{ row.flat_number }}" required></div>
+      <div class="col-6"><label class="form-label">Floor</label><input class="form-control" type="number" name="floor_no" value="{{ row.floor_no }}" required></div>
+      <div class="col-6">
+        <label class="form-label">BHK</label>
+        <select class="form-select" name="bhk_type">{% for t in bhk_types %}<option {% if t == row.bhk_type %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-6"><label class="form-label">Area sqft</label><input class="form-control" type="number" step="0.01" name="area_sqft" value="{{ row.area_sqft }}" required></div>
+      <div class="col-12">
+        <label class="form-label">Occupancy</label>
+        <select class="form-select" name="occupancy_status">{% for t in occupancy %}<option {% if t == row.occupancy_status %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-accent" type="submit">Update</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('flats') }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

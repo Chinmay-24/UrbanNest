@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Staff · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Staff</h1>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Add staff</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12"><label class="form-label">Name</label><input class="form-control" name="full_name" required></div>
+          <div class="col-12">
+            <label class="form-label">Role</label>
+            <select class="form-select" name="role">{% for t in roles %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-6"><label class="form-label">Phone</label><input class="form-control" name="phone" required></div>
+          <div class="col-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" required></div>
+          <div class="col-6"><label class="form-label">Salary</label><input class="form-control" type="number" step="0.01" min="1" name="salary" required></div>
+          <div class="col-6"><label class="form-label">Join date</label><input class="form-control" type="date" name="join_date" required></div>
+          <div class="col-12">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="employment_status">{% for t in employment %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Name</th><th>Role</th><th>Contact</th><th>Salary</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.full_name }}<div class="small text-secondary">{{ row.employment_status }}</div></td>
+                  <td>{{ row.role }}</td>
+                  <td>{{ row.phone }}<div class="small text-secondary">{{ row.email }}</div></td>
+                  <td>{{ row.salary|money }}</td>
+                  <td>{{ row_actions(url_for('edit_staff', staff_id=row.staff_id), url_for('delete_staff', staff_id=row.staff_id), 'staff member') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

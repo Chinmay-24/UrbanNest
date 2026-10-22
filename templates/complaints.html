@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "_actions.html" import row_actions %}
+{% block title %}Complaints · UrbanNest{% endblock %}
+{% block content %}
+  <h1 class="page-title h2 mb-4">Complaints</h1>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="panel p-3 p-md-4">
+        <h2 class="h5">Register complaint</h2>
+        <form method="post" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Resident</label>
+            <select class="form-select" name="resident_id">
+              {% for r in residents %}<option value="{{ r.resident_id }}">{{ r.full_name }} ({{ r.flat_number }})</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Assign staff</label>
+            <select class="form-select" name="assigned_staff_id">
+              <option value="">Unassigned</option>
+              {% for s in staff %}<option value="{{ s.staff_id }}">{{ s.full_name }} · {{ s.role }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category">{% for t in categories %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">{% for t in statuses %}<option>{{ t }}</option>{% endfor %}</select>
+          </div>
+          <div class="col-12"><label class="form-label">Title</label><input class="form-control" name="title" required></div>
+          <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" name="description" rows="2" required></textarea></div>
+          <div class="col-12"><label class="form-label">Raised on</label><input class="form-control" type="datetime-local" name="raised_on" required></div>
+          <div class="col-12"><label class="form-label">Resolved on</label><input class="form-control" type="datetime-local" name="resolved_on"></div>
+          <div class="col-12"><button class="btn btn-accent" type="submit">Insert</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel p-3 p-md-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Complaint</th><th>Resident</th><th>Staff</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.title }}<div class="small text-secondary">{{ row.category }} · {{ row.raised_on|when }}</div></td>
+                  <td>{{ row.full_name }}<div class="small text-secondary">{{ row.flat_number }}</div></td>
+                  <td>{{ row.staff_name or 'Unassigned' }}</td>
+                  <td><span class="badge badge-soft">{{ row.status }}</span></td>
+                  <td>{{ row_actions(url_for('edit_complaint', complaint_id=row.complaint_id), url_for('delete_complaint', complaint_id=row.complaint_id), 'complaint') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
