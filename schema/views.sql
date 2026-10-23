@@ -1,4 +1,4 @@
-USE urbannest;
+-- PostgreSQL Views
 
 CREATE OR REPLACE VIEW vw_flat_occupancy AS
 SELECT
@@ -43,6 +43,6 @@ SELECT
   c.category,
   c.status,
   COUNT(*) AS complaint_count,
-  AVG(TIMESTAMPDIFF(HOUR, c.raised_on, COALESCE(c.resolved_on, NOW()))) AS avg_hours_open
+  AVG(EXTRACT(EPOCH FROM (COALESCE(c.resolved_on, NOW()) - c.raised_on))/3600) AS avg_hours_open
 FROM complaints c
 GROUP BY c.category, c.status;

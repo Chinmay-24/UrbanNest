@@ -1,4 +1,4 @@
-USE urbannest;
+-- PostgreSQL seed data
 
 INSERT INTO blocks (block_id, block_name, total_floors, total_flats, constructed_year, description) VALUES
 (1, 'A-Wing', 8, 32, 2018, 'Main residential wing near the gate'),

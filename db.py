@@ -1,5 +1,5 @@
-import mysql.connector
-from mysql.connector import Error
+import psycopg2
+import psycopg2.extras
 
 import config
 
@@ -9,27 +9,24 @@ class DatabaseError(Exception):
 
 
 def get_connection(database=None):
-    return mysql.connector.connect(
-        host=config.MYSQL_HOST,
-        port=config.MYSQL_PORT,
-        user=config.MYSQL_USER,
-        password=config.MYSQL_PASSWORD,
-        database=database if database is not None else config.MYSQL_DATABASE,
-        charset="utf8mb4",
-        collation="utf8mb4_unicode_ci",
-        autocommit=False,
+    return psycopg2.connect(
+        host=config.POSTGRES_HOST,
+        port=config.POSTGRES_PORT,
+        user=config.POSTGRES_USER,
+        password=config.POSTGRES_PASSWORD,
+        database=database if database is not None else config.POSTGRES_DATABASE,
     )
 
 
 def fetch_all(sql, params=None):
     conn = get_connection()
     try:
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cursor.execute(sql, params or ())
         rows = cursor.fetchall()
         cursor.close()
-        return rows
-    except Error as exc:
+        return [dict(row) for row in rows]
+    except Exception as exc:
         raise DatabaseError(str(exc)) from exc
     finally:
         conn.close()
@@ -46,10 +43,10 @@ def execute(sql, params=None):
         cursor = conn.cursor()
         cursor.execute(sql, params or ())
         conn.commit()
-        last_id = cursor.lastrowid
+        last_id = cursor.fetchone()[0] if cursor.rowcount > 0 else None
         cursor.close()
         return last_id
-    except Error as exc:
+    except Exception as exc:
         conn.rollback()
         raise DatabaseError(str(exc)) from exc
     finally:

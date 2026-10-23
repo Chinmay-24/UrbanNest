@@ -234,7 +234,7 @@ def dashboard():
         "bookings": fetch_one(
             """
             SELECT COUNT(*) AS n FROM facility_bookings
-            WHERE status = 'Booked' AND booking_date >= CURDATE()
+            WHERE status = 'Booked' AND booking_date >= CURRENT_DATE
             """
         )["n"],
         "outstanding": fetch_one(
